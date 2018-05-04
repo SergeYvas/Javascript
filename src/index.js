@@ -8,9 +8,9 @@
  */
 
 function forEach(array, fn, context) {
-  for(let i = 0; i < array.length; i++) {
-    fn.call(context, array[i], i, array);
-  }
+    for (let i = 0; i < array.length; i++) {
+        fn.call(context, array[i], i, array);
+    }
 }
 
 /*
@@ -20,11 +20,13 @@ function forEach(array, fn, context) {
  Посмотрите как работает map и повторите это поведение для массива, который будет передан в параметре array
  */
 function map(array, fn, context) {
-  const newArray = [];
-  for(let i = 0; i < array.length; i++) {
-    newArray.push(fn.call(context, array[i], i, array));
-  }
-  return newArray;
+    const newArray = [];
+
+    for (let i = 0; i < array.length; i++) {
+        newArray.push(fn.call(context, array[i], i, array));
+    }
+
+    return newArray;
 }
 
 /*
@@ -35,12 +37,14 @@ function map(array, fn, context) {
  */
 
 function reduce(array, fn, initial) {
-  let initialValue = initial ? initial : array[0];
-  const increm = initial ? 0 : 1;
-  for (let i = increm; i < array.length; i++) {
-    initialValue = fn(initialValue, array[i], i, array);
-  }
-  return initialValue;
+    let initialValue = initial ? initial : array[0];
+    const increm = initial ? 0 : 1;
+
+    for (let i = increm; i < array.length; i++) {
+        initialValue = fn(initialValue, array[i], i, array);
+    }
+
+    return initialValue;
 }
 
 /*
@@ -52,11 +56,13 @@ function reduce(array, fn, initial) {
    upperProps({ name: 'Сергей', lastName: 'Петров' }) вернет ['NAME', 'LASTNAME']
  */
 function upperProps(obj) {
-  const newArray = [];
-  for (let item in obj) {
-    obj.hasOwnProperty(item) && newArray.push(item.toUpperCase());
-  }
-  return newArray;
+    const newArray = [];
+
+    Object.keys(obj).forEach(item => {
+        obj.hasOwnProperty(item) && newArray.push(item.toUpperCase());
+    })
+       
+    return newArray;
 }
 
 /*
@@ -66,7 +72,33 @@ function upperProps(obj) {
  Посмотрите как работает slice и повторите это поведение для массива, который будет передан в параметре array
  */
 
-function slice(array, from = 0, to = array.length) {
+function slice(array, from, to) {
+    const len = array.length;
+    const result = [];
+    let start = from;
+    let end = to;
+
+    if (from < 0 && Math.abs(from) < len) {
+        start = len - Math.abs(from);
+    } else if (from < 0 && Math.abs(from) > len || from === undefined) {
+        start = 0;
+    }
+
+    if (to < 0 && Math.abs(to) < len) {
+        end = len - Math.abs(to);
+    } else if (to > len || to === undefined) {
+        end = len;
+    }
+    
+    if (to < 0 && Math.abs(to) > len || from > len) {
+        return result;
+    }
+
+    for (let i = start; i < end; i++) {
+        result.push(array[i])
+    }
+
+    return result;
 }
 
 /*
@@ -75,8 +107,14 @@ function slice(array, from = 0, to = array.length) {
  Функция принимает объект и должна вернуть Proxy для этого объекта
  Proxy должен перехватывать все попытки записи значений свойств и возводить это значение в квадрат
  */
-function createProxy(obj) {
-}
+
+const createProxy = obj => new Proxy(obj, {
+    set(obj, prop, value) {
+        obj[prop] = value * value;
+
+        return true;
+    }
+});
 
 export {
     forEach,
