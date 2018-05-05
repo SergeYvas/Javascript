@@ -58,7 +58,7 @@ function reduce(array, fn, initial) {
 function upperProps(obj) {
     const result = [];
 
-    for (let key of Object.keys(obj)){
+    for (let key of Object.keys(obj)) {
         result.push(key.toUpperCase())
     }
        
@@ -75,13 +75,14 @@ function upperProps(obj) {
 function slice(array, from = 0, to = array.length) {
     arguments.length <= 1 && array;
     
-    const res = [], len = array.length;
+    const res = [];
+    const len = array.length;
 
-    const bigin = from < 0 ? len + from : from;
+    const begin = from < 0 ? len + from : from;
     const end = to < 0 ? len + to : to;
 
     for (let i = 0; i < len; i++) {
-        i >= bigin && i < end && res.push(array[i]);
+        i >= begin && i < end && res.push(array[i]);
     }
 
     return res;
