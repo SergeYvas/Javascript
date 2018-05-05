@@ -56,13 +56,13 @@ function reduce(array, fn, initial) {
    upperProps({ name: 'Сергей', lastName: 'Петров' }) вернет ['NAME', 'LASTNAME']
  */
 function upperProps(obj) {
-    const newArray = [];
+    const result = [];
 
-    Object.keys(obj).forEach(item => {
-        obj.hasOwnProperty(item) && newArray.push(item.toUpperCase());
-    })
+    for (let key of Object.keys(obj)){
+        result.push(key.toUpperCase())
+    }
        
-    return newArray;
+    return result;
 }
 
 /*
