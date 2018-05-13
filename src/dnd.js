@@ -17,6 +17,8 @@
  */
 const homeworkContainer = document.querySelector('#homework-container');
 
+addDragListener(homeworkContainer);
+
 /*
  Функция должна создавать и возвращать новый div с классом draggable-div и случайными размерами/цветом/позицией
  Функция должна только создавать элемент и задвать ему случайные размер/позицию/цвет
@@ -27,6 +29,16 @@ const homeworkContainer = document.querySelector('#homework-container');
    homeworkContainer.appendChild(newDiv);
  */
 function createDiv() {
+    const div = document.createElement('div');
+
+    div.style.height = `${Math.floor(Math.random() * (100 - 20) + 20)}px`;
+    div.style.width = `${Math.floor(Math.random() * (100 - 20) + 20)}px`;
+    div.style.position = 'absolute';
+    div.style.top = `${Math.floor(Math.random() * (100 - 0) + 0)}%`;
+    div.style.left = `${Math.floor(Math.random() * (100 - 0) + 0)}%`;
+    div.style.backgroundColor = `#${Math.floor(Math.random() * (999 - 100) + 100)}`;
+
+    return div;
 }
 
 /*
@@ -37,7 +49,30 @@ function createDiv() {
    homeworkContainer.appendChild(newDiv);
    addListeners(newDiv);
  */
-function addListeners(target) {
+function addDragListener(target) {
+    let dragged;
+
+    target.addEventListener('dragstart', ({ target }) => {
+
+        if (target.classList.contains('draggable-div')) {
+            dragged = target;
+            dragged.style.opacity = .5;
+        }
+    });
+
+    target.addEventListener('dragend', e => {
+
+        if (e.target.classList.contains('draggable-div')) {
+            dragged.style.opacity = '';
+            dragged.style.top = `${e.clientY}px`;
+            dragged.style.left = `${e.clientX}px`;
+        }
+    });
+}
+
+function addDragAttributes(target) {
+    target.classList.add('draggable-div');
+    target.draggable = 'true';
 }
 
 let addDivButton = homeworkContainer.querySelector('#addDiv');
@@ -49,7 +84,7 @@ addDivButton.addEventListener('click', function() {
     // добавить на страницу
     homeworkContainer.appendChild(div);
     // назначить обработчики событий мыши для реализации D&D
-    addListeners(div);
+    addDragAttributes(div);
     // можно не назначать обработчики событий каждому div в отдельности, а использовать делегирование
     // или использовать HTML5 D&D - https://www.html5rocks.com/ru/tutorials/dnd/basics/
 });
